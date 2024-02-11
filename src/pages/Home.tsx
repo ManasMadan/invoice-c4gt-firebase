@@ -1,14 +1,69 @@
 import {
+  IonButton,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
+  IonIcon,
   IonPage,
+  IonPopover,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { APP_NAME } from "../app-data";
+import { APP_NAME, DATA } from "../app-data";
 import Login from "../components/Login/Login";
+const AppGeneral = require("../components/socialcalc/AppGeneral.js");
+import { useEffect, useState } from "react";
+import { Local } from "../components/Storage/LocalStorage";
+import { menu, settings } from "ionicons/icons";
 
 const Home: React.FC = () => {
+  const [showMenu, setShowMenu] = useState(false);
+  const [showPopover, setShowPopover] = useState<{
+    open: boolean;
+    event: Event | undefined;
+  }>({ open: false, event: undefined });
+  const [selectedFile, updateSelectedFile] = useState("default");
+  const [billType, updateBillType] = useState(1);
+  const [device] = useState(AppGeneral.getDeviceType());
+
+  const store = new Local();
+
+  const closeMenu = () => {
+    setShowMenu(false);
+  };
+
+  const activateFooter = (footer) => {
+    AppGeneral.activateFooterButton(footer);
+  };
+
+  useEffect(() => {
+    const data = DATA["home"][device]["msc"];
+    AppGeneral.initializeApp(JSON.stringify(data));
+  }, []);
+
+  useEffect(() => {
+    activateFooter(billType);
+  }, [billType]);
+
+  const footers = DATA["home"][device]["footers"];
+  const footersList = footers.map((footerArray) => {
+    return (
+      <IonButton
+        key={footerArray.index}
+        expand="full"
+        color="light"
+        className="ion-no-margin"
+        onClick={() => {
+          updateBillType(footerArray.index);
+          activateFooter(footerArray.index);
+          setShowPopover({ open: false, event: undefined });
+        }}
+      >
+        {footerArray.name}
+      </IonButton>
+    );
+  });
   return (
     <IonPage>
       <IonHeader>
@@ -18,11 +73,49 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <IonToolbar color="primary">
+          <Login />
+
+          {selectedFile === "default" ? (
+            <IonIcon
+              icon={settings}
+              slot="end"
+              className="ion-padding-end"
+              size="large"
+              onClick={(e) => {
+                setShowPopover({ open: true, event: e.nativeEvent });
+                console.log("Popover clicked");
+              }}
+            />
+          ) : null}
+          <IonPopover
+            animated
+            keyboardClose
+            backdropDismiss
+            event={showPopover.event}
+            isOpen={showPopover.open}
+            onDidDismiss={() =>
+              setShowPopover({ open: false, event: undefined })
+            }
+          >
+            {footersList}
+          </IonPopover>
+        </IonToolbar>
+        <IonToolbar color="secondary">
+          <IonTitle className="ion-text-center">
+            Editing : {selectedFile}
+          </IonTitle>
+        </IonToolbar>
+
+        <IonFab vertical="bottom" horizontal="end" slot="fixed">
+          <IonFabButton type="button" onClick={() => setShowMenu(true)}>
+            <IonIcon icon={menu} />
+          </IonFabButton>
+        </IonFab>
+
+        <div id="workbookControl"></div>
+        <div id="tableeditor"></div>
+        <div id="msg"></div>
       </IonContent>
     </IonPage>
   );
