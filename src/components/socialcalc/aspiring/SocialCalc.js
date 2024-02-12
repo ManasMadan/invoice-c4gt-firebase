@@ -5760,6 +5760,7 @@ SocialCalc.CalculateCellSkipData = function (context) {
   context.cellskip = {}; // reset
 
   // Calculate cellskip data
+  var maxrow, maxcol;
 
   for (row = 1; row <= sheetobj.attribs.lastrow; row++) {
     for (col = 1; col <= sheetobj.attribs.lastcol; col++) {
@@ -5802,7 +5803,7 @@ SocialCalc.CalculateColWidthData = function (context) {
   // Calculate column width data
 
   totalwidth = context.showRCHeaders ? context.rownamewidth - 0 : 0;
-  for (colpane = 0; colpane < context.colpanes.length; colpane++) {
+  for (var colpane = 0; colpane < context.colpanes.length; colpane++) {
     for (
       colnum = context.colpanes[colpane].first;
       colnum <= context.colpanes[colpane].last;
@@ -5901,7 +5902,7 @@ SocialCalc.RenderSheet = function (context, oldtable, linkstyle) {
 
   for (rowpane = 0; rowpane < context.rowpanes.length; rowpane++) {
     for (
-      rownum = context.rowpanes[rowpane].first;
+      var rownum = context.rowpanes[rowpane].first;
       rownum <= context.rowpanes[rowpane].last;
       rownum++
     ) {
@@ -6042,7 +6043,7 @@ SocialCalc.RenderColHeaders = function (context) {
   newcol.width = context.rownamewidth;
   result.appendChild(newcol);
 
-  for (colpane = 0; colpane < context.colpanes.length; colpane++) {
+  for (var colpane = 0; colpane < context.colpanes.length; colpane++) {
     for (
       colnum = context.colpanes[colpane].first;
       colnum <= context.colpanes[colpane].last;
@@ -6191,7 +6192,7 @@ SocialCalc.RenderCell = function (
   }
 
   sheetattribs = sheetobj.attribs;
-  scc = SocialCalc.Constants;
+  var scc = SocialCalc.Constants;
 
   if (cell.colspan > 1) {
     span = 1;
@@ -11331,7 +11332,7 @@ SocialCalc.FitToEditTable = function (editor) {
   // Calculate column width data
 
   totalwidth = context.showRCHeaders ? context.rownamewidth - 0 : 0;
-  for (colpane = 0; colpane < context.colpanes.length - 1; colpane++) {
+  for (var colpane = 0; colpane < context.colpanes.length - 1; colpane++) {
     // Get width of all but last pane
     for (
       colnum = context.colpanes[colpane].first;
@@ -16677,6 +16678,7 @@ SocialCalc.FormatNumber.parse_format_string = function (
   var indate; // keeps track of date/time placeholders
   var chpos; // character position being looked at
   var ch; // character being looked at
+  var sectioninfo;
 
   if (format_defs[format_string]) return; // already defined - nothing to do
 
@@ -17368,6 +17370,7 @@ SocialCalc.Formula.ParseFormulaIntoTokens = function (line) {
   var str = "";
   var state = 0;
   var haddecimal = false;
+  var cclass;
 
   for (i = 0; i <= line.length; i++) {
     if (i < line.length) {
@@ -17829,6 +17832,7 @@ SocialCalc.Formula.EvaluatePolish = function (
     type: "e#VALUE!",
     error: scc.s_parseerrmissingoperand,
   };
+  var value;
 
   var operand = [];
   var PushOperand = function (t, v) {
@@ -27790,8 +27794,9 @@ SocialCalc.SpreadsheetControlSortLoad = function (
     ).checked = true;
   } else {
     sele.selectedIndex = 0;
-    document.getElementById(spreadsheet.idPrefix + "minorsortup").checked =
-      true;
+    document.getElementById(
+      spreadsheet.idPrefix + "minorsortup"
+    ).checked = true;
   }
   sele = document.getElementById(spreadsheet.idPrefix + "lastsort");
   if (parts[6]) {
@@ -28319,6 +28324,7 @@ SocialCalc.SettingsControlSetCurrentPanel = function (panelobj) {
 SocialCalc.SettingsControlInitializePanel = function (panelobj) {
   var ctrlname;
   var sc = SocialCalc.SettingsControls;
+  var ctrl;
 
   for (ctrlname in panelobj) {
     if (ctrlname == "name") continue;
@@ -31212,6 +31218,7 @@ SocialCalc.CallOutOnRenderCell = function (sheetobj, value, cr) {
   var valuetype = cell.valuetype || ""; // get type of value to determine formatting
   var valuesubtype = valuetype.substring(1);
   var sheetattribs = sheetobj.attribs;
+  var valueformat;
   valuetype = valuetype.charAt(0);
   if (valuetype == "t") {
     valueformat =

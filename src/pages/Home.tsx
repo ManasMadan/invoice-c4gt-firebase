@@ -16,6 +16,7 @@ const AppGeneral = require("../components/socialcalc/AppGeneral");
 import { useEffect, useState } from "react";
 import { Local } from "../components/Storage/LocalStorage";
 import { menu, settings } from "ionicons/icons";
+import "./Home.css";
 
 const Home: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -67,9 +68,8 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonTitle>{APP_NAME}</IonTitle>
-          <Login />
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -113,9 +113,11 @@ const Home: React.FC = () => {
           </IonFabButton>
         </IonFab>
 
-        <div id="workbookControl"></div>
-        <div id="tableeditor"></div>
-        <div id="msg"></div>
+        <div id="container">
+          <div id="workbookControl"></div>
+          <div id="tableeditor"></div>
+          <div id="msg"></div>
+        </div>
       </IonContent>
     </IonPage>
   );
