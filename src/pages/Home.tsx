@@ -33,8 +33,6 @@ const Home: React.FC = () => {
     setShowMenu(false);
   };
 
-  console.log(AppGeneral);
-
   const activateFooter = (footer) => {
     AppGeneral.activateFooterButton(footer);
   };

@@ -27790,9 +27790,8 @@ SocialCalc.SpreadsheetControlSortLoad = function (
     ).checked = true;
   } else {
     sele.selectedIndex = 0;
-    document.getElementById(
-      spreadsheet.idPrefix + "minorsortup"
-    ).checked = true;
+    document.getElementById(spreadsheet.idPrefix + "minorsortup").checked =
+      true;
   }
   sele = document.getElementById(spreadsheet.idPrefix + "lastsort");
   if (parts[6]) {

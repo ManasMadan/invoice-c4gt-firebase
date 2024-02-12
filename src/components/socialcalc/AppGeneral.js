@@ -15,7 +15,6 @@ export function initializeApp(data) {
   /* Initializes the spreadsheet */
 
   let tableeditor = document.getElementById("tableeditor");
-  console.log(tableeditor);
   let spreadsheet = new SocialCalc.SpreadsheetControl();
   let workbook = new SocialCalc.WorkBook(spreadsheet);
   workbook.InitializeWorkBook("sheet1");
