@@ -17,6 +17,9 @@ import { useEffect, useState } from "react";
 import { Local } from "../components/Storage/LocalStorage";
 import { menu, settings } from "ionicons/icons";
 import "./Home.css";
+import Menu from "../components/Menu/Menu";
+import Files from "../components/Files/Files";
+import NewFile from "../components/NewFile/NewFile";
 
 const Home: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -88,6 +91,19 @@ const Home: React.FC = () => {
               }}
             />
           ) : null}
+          <Files
+            store={store}
+            file={selectedFile}
+            updateSelectedFile={updateSelectedFile}
+            updateBillType={updateBillType}
+          />
+
+          <NewFile
+            file={selectedFile}
+            updateSelectedFile={updateSelectedFile}
+            store={store}
+            billType={billType}
+          />
           <IonPopover
             animated
             keyboardClose
@@ -112,6 +128,15 @@ const Home: React.FC = () => {
             <IonIcon icon={menu} />
           </IonFabButton>
         </IonFab>
+
+        <Menu
+          showM={showMenu}
+          setM={closeMenu}
+          file={selectedFile}
+          updateSelectedFile={updateSelectedFile}
+          store={store}
+          bT={billType}
+        />
 
         <div id="container">
           <div id="workbookControl"></div>

@@ -9161,6 +9161,7 @@ SocialCalc.EditorSheetStatusCallback = function (
 ) {
   var f, cell, dcmd;
   var sheetobj = editor.context.sheetobj;
+  var cr;
 
   var signalstatus = function (s) {
     for (f in editor.StatusCallback) {
@@ -12079,6 +12080,7 @@ var CoordForColorChange;
 var editCoord;
 SocialCalc.InputBoxDisplayCellContents = function (inputbox, coord) {
   var scc = SocialCalc.Constants;
+  var cell, position;
 
   if (!inputbox) return;
 
