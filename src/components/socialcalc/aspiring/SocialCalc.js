@@ -7882,7 +7882,7 @@ code does this (e.g., use table-layout:fixed).
 
     var ele = event.target || event.srcElement; // investigate
 
-    for (wobj = null; !wobj && ele; ele = ele.parentNode) {
+    for (var wobj = null; !wobj && ele; ele = ele.parentNode) {
       // investigate
       wobj = SocialCalc.LookupElement(ele, touchinfo.registeredElements);
     }
