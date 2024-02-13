@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as AppGeneral from "../socialcalc/AppGeneral";
+import * as AppGeneral from "../socialcalc/index.js";
 import { File, Local } from "../Storage/LocalStorage";
 import { DATA } from "../../app-data.js";
 import { IonAlert, IonIcon } from "@ionic/react";

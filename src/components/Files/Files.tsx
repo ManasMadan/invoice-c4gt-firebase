@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Files.css";
-import * as AppGeneral from "../socialcalc/AppGeneral";
+import * as AppGeneral from "../socialcalc/index.js";
 import { DATA } from "../../app-data.js";
 import { Local } from "../Storage/LocalStorage";
 import {

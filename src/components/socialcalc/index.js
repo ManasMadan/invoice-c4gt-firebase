@@ -1,4 +1,4 @@
-var SocialCalc = require("./aspiring/SocialCalc.js");
+const SocialCalc = require("./aspiring/SocialCalc.js");
 
 export function getDeviceType() {
   /* Returns the type of the device */
@@ -7,7 +7,6 @@ export function getDeviceType() {
   if (navigator.userAgent.match(/iPad/)) device = "iPad";
   if (navigator.userAgent.match(/iPhone/)) device = "iPhone";
   if (navigator.userAgent.match(/Android/)) device = "Android";
-  console.log("Device is: " + device);
   return device;
 }
 
