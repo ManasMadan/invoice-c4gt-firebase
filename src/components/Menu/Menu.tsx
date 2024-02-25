@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import * as AppGeneral from "../socialcalc/index.js";
 import { File, Local } from "../Storage/LocalStorage";
 import { isPlatform, IonToast } from "@ionic/react";
-// import { EmailComposer } from "@ionic-native/email-composer";
+import { EmailComposer } from "capacitor-email-composer";
 // import { Printer } from "@ionic-native/printer";
 import { IonActionSheet, IonAlert } from "@ionic/react";
 import { saveOutline, save, mail, print } from "ionicons/icons";
+import { APP_NAME } from "../../app-data.js";
 
 const Menu: React.FC<{
   showM: boolean;
@@ -113,42 +114,22 @@ const Menu: React.FC<{
   };
 
   const sendEmail = () => {
-    // if (isPlatform("hybrid")) {
-    //   const emailComposer = EmailComposer;
-    //   emailComposer.addAlias("gmail", "com.google.android.gm");
-    //     const content = AppGeneral.getCurrentHTMLContent();
-    //     // then use alias when sending email
-    //     emailComposer.open({
-    //       app: "mailto",
-    //       to: "geetanshu2502@gmail.com",
-    //       cc: "erika@mustermann.de",
-    //       bcc: ["john@doe.com", "jane@doe.com"],
-    //       attachments: [],
-    //       subject: "Test mail",
-    //       body: content,
-    //       isHtml: true,
-    //     });
-    //     console.log(AppGeneral.getCurrentHTMLContent());
-    //   } else {
-    //   const mailgun = require("mailgun-js");
-    //   const mg = mailgun({
-    //     apiKey: "key-a128dfbe216c92500974c6d8ee1d4caa",
-    //     domain: "sandbox9e26c52330b343b3bb63ff465a74f156.mailgun.org",
-    //   });
-    //   const data = {
-    //     from: "Excited User <me@samples.mailgun.org>",
-    //     to: "geetanshu2502@gmail.com",
-    //     subject: "Test Mail",
-    //     html: AppGeneral.getCurrentHTMLContent(),
-    //   };
-    //   mg.messages().send(data, function (error, body) {
-    //     if (error) {
-    //       console.log(error);
-    //     } else {
-    //       console.log("Email sent successfully");
-    //     }
-    //   });
-    // }
+    if (isPlatform("hybrid")) {
+      const content = AppGeneral.getCurrentHTMLContent();
+      const base64 = btoa(content);
+
+      EmailComposer.open({
+        to: ["jackdwell08@gmail.com"],
+        cc: [],
+        bcc: [],
+        body: "PFA",
+        attachments: [{ type: "base64", path: base64, name: "Invoice.html" }],
+        subject: `${APP_NAME} attached`,
+        isHtml: true,
+      });
+    } else {
+      alert("This Functionality works on Anroid/IOS devices");
+    }
   };
 
   return (
