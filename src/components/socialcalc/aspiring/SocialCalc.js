@@ -12317,7 +12317,7 @@ ha.style.visibility = 'hidden';
       //changes for prompt
 
       input.style.fontSize = "100%";
-      // input.style.backgroundColor = "#72A4D2";
+      input.style.backgroundColor = "transparent";
 
       input.style.borderBottomColor = "#306eff";
       input.style.borderBottomLeftRadius = "3px";
