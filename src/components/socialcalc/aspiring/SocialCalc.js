@@ -11988,7 +11988,7 @@ ha.style.visibility = 'hidden';
 
     // if scrolled off a row with starting rowspans, replace rows for the largest rowspan
 
-    maxrowspan = 1;
+    var maxrowspan = 1;
     oldrownum = context.rowpanes[rowpane].first - 1;
 
     for (colpane = 0; colpane < context.colpanes.length; colpane++) {
@@ -11997,7 +11997,7 @@ ha.style.visibility = 'hidden';
         colnum <= context.colpanes[colpane].last;
         colnum++
       ) {
-        coord = SocialCalc.crToCoord(colnum, oldrownum);
+        var coord = SocialCalc.crToCoord(colnum, oldrownum);
         if (context.cellskip[coord]) continue;
         cell = sheetobj.cells[coord];
         if (cell && cell.rowspan > maxrowspan) maxrowspan = cell.rowspan;
@@ -12060,7 +12060,8 @@ ha.style.visibility = 'hidden';
       newbottomrow,
       newrow,
       oldchild,
-      bottomrownum;
+      bottomrownum,
+      maxrowspan;
     var rowneedsrefresh = {};
 
     var context = editor.context;

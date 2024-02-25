@@ -79,18 +79,16 @@ const Home: React.FC = () => {
         <IonToolbar color="primary">
           <Login />
 
-          {selectedFile === "default" ? (
-            <IonIcon
-              icon={settings}
-              slot="end"
-              className="ion-padding-end"
-              size="large"
-              onClick={(e) => {
-                setShowPopover({ open: true, event: e.nativeEvent });
-                console.log("Popover clicked");
-              }}
-            />
-          ) : null}
+          <IonIcon
+            icon={settings}
+            slot="end"
+            className="ion-padding-end"
+            size="large"
+            onClick={(e) => {
+              setShowPopover({ open: true, event: e.nativeEvent });
+              console.log("Popover clicked");
+            }}
+          />
           <Files
             store={store}
             file={selectedFile}
