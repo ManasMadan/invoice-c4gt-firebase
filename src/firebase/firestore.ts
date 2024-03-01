@@ -89,6 +89,7 @@ const downloadFileFromFirebase = async (userId, key, onSuccess) => {
       local._saveFile(file as File);
       alert("File Downloaded");
       onSuccess && onSuccess();
+      return;
     }
 
     if (!option) {
