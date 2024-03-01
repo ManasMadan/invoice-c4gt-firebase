@@ -71,6 +71,7 @@ const Home: React.FC = () => {
       </IonButton>
     );
   });
+
   return (
     <IonPage>
       <IonHeader>
@@ -93,6 +94,14 @@ const Home: React.FC = () => {
             }}
           />
           <Files
+            filesFrom="Local"
+            store={store}
+            file={selectedFile}
+            updateSelectedFile={updateSelectedFile}
+            updateBillType={updateBillType}
+          />
+          <Files
+            filesFrom="Cloud"
             store={store}
             file={selectedFile}
             updateSelectedFile={updateSelectedFile}

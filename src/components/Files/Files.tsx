@@ -13,18 +13,33 @@ import {
   IonAlert,
   IonItemGroup,
 } from "@ionic/react";
-import { fileTrayFull, list, trash, create } from "ionicons/icons";
+import {
+  fileTrayFull,
+  trash,
+  create,
+  cloudUpload,
+  cloudDownload,
+} from "ionicons/icons";
+import useUser from "../../hooks/useUser";
+import {
+  getFilesKeysFromFirestore,
+  uploadFileToCloud,
+  downloadFileFromFirebase,
+  deleteFileFromFirebase,
+} from "../../firebase/firestore";
 
 const Files: React.FC<{
   store: Local;
   file: string;
   updateSelectedFile: Function;
   updateBillType: Function;
+  filesFrom: "Local" | "Cloud";
 }> = (props) => {
   const [modal, setModal] = useState(null);
   const [listFiles, setListFiles] = useState(false);
   const [showAlert1, setShowAlert1] = useState(false);
   const [currentKey, setCurrentKey] = useState(null);
+  const { user, isLoading } = useUser();
 
   const editFile = (key) => {
     props.store._getFile(key).then((data) => {
@@ -34,9 +49,21 @@ const Files: React.FC<{
     });
     // console.log(JSON.stringify(data));
   };
+  const moveFileToCloud = (key) => {
+    props.store._getFile(key).then((fileData) => {
+      if (user) {
+        uploadFileToCloud(user, fileData, () => {
+          alert("File Uploaded to Cloud");
+          setListFiles(false);
+        });
+      } else {
+        alert("Login to Continue");
+        setListFiles(false);
+      }
+    });
+  };
 
   const deleteFile = (key) => {
-    // event.preventDefault();
     setShowAlert1(true);
     setCurrentKey(key);
   };
@@ -52,21 +79,47 @@ const Files: React.FC<{
   };
 
   const temp = async () => {
-    const data = await props.store._getAllFiles();
-    const fileList = Object.keys(data).map((key) => {
+    let files;
+    if (props.filesFrom == "Local") {
+      files = await props.store._getAllFiles();
+    } else if (props.filesFrom == "Cloud") {
+      if (isLoading) return;
+      if (!user) {
+        alert("Login to Continue");
+      } else {
+        files = await getFilesKeysFromFirestore(user.uid);
+      }
+    }
+    const fileList = Object.keys(files).map((key) => {
       return (
         <IonItemGroup key={key}>
           <IonItem>
             <IonLabel>{key}</IonLabel>
-            {_formatDate(data[key])}
+            {_formatDate(files[key])}
+            {props.filesFrom === "Local" && (
+              <IonIcon
+                icon={create}
+                color="warning"
+                slot="end"
+                size="large"
+                onClick={() => {
+                  setListFiles(false);
+                  editFile(key);
+                }}
+              />
+            )}
+
             <IonIcon
-              icon={create}
-              color="warning"
+              icon={props.filesFrom === "Local" ? cloudUpload : cloudDownload}
+              color="primary"
               slot="end"
               size="large"
               onClick={() => {
-                setListFiles(false);
-                editFile(key);
+                if (props.filesFrom === "Local") moveFileToCloud(key);
+                else
+                  downloadFileFromFirebase(user.uid, key, () =>
+                    setListFiles(false)
+                  );
               }}
             />
             <IonIcon
@@ -108,7 +161,7 @@ const Files: React.FC<{
   return (
     <React.Fragment>
       <IonIcon
-        icon={fileTrayFull}
+        icon={props.filesFrom == "Local" ? fileTrayFull : cloudDownload}
         className="ion-padding-end"
         slot="end"
         size="large"
@@ -128,9 +181,17 @@ const Files: React.FC<{
           {
             text: "Yes",
             handler: () => {
-              props.store._deleteFile(currentKey);
-              loadDefault();
-              setCurrentKey(null);
+              if (props.filesFrom === "Local") {
+                props.store._deleteFile(currentKey);
+                loadDefault();
+                setCurrentKey(null);
+              } else {
+                deleteFileFromFirebase(user.uid, currentKey, () => {
+                  setListFiles(false);
+                  loadDefault();
+                  setCurrentKey(null);
+                });
+              }
             },
           },
         ]}

@@ -39,7 +39,7 @@ export class Local {
 
   _getFile = async (name: string) => {
     const rawData = await Preferences.get({ key: name });
-    return JSON.parse(rawData.value || "");
+    return JSON.parse(rawData.value);
   };
 
   _getAllFiles = async () => {
