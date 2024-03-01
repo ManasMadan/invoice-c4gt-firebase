@@ -10320,7 +10320,7 @@ ha.style.visibility = 'hidden';
   //
 
   SocialCalc.ProcessEditorDblClick = function (e) {
-    var editor, result, coord, textarea, wval, range;
+    var editor, result, coord, textarea, wval, range, sheetobj;
 
     var event = e || window.event;
 
@@ -12061,7 +12061,8 @@ ha.style.visibility = 'hidden';
       newrow,
       oldchild,
       bottomrownum,
-      maxrowspan;
+      maxrowspan,
+      coord;
     var rowneedsrefresh = {};
 
     var context = editor.context;
@@ -15390,7 +15391,7 @@ ha.style.visibility = 'hidden';
 
   SocialCalc.ProcessMouseWheel = function (e) {
     var event = e || window.event;
-    var delta;
+    var delta, coord;
 
     if (SocialCalc.Keyboard.passThru) return; // ignore
 
