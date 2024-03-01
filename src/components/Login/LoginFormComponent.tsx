@@ -3,9 +3,13 @@ import React, { MouseEventHandler, useState } from "react";
 
 interface ComponentProps {
   handleLogin: Function;
+  handleSignUp: Function;
 }
 
-const LoginFormComponent: React.FC<ComponentProps> = ({ handleLogin }) => {
+const LoginFormComponent: React.FC<ComponentProps> = ({
+  handleLogin,
+  handleSignUp,
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -47,6 +51,13 @@ const LoginFormComponent: React.FC<ComponentProps> = ({ handleLogin }) => {
         onClick={() => handleLogin(email, password)}
       >
         Login
+      </IonButton>
+      <IonButton
+        expand="full"
+        className="ion-text-center"
+        onClick={() => handleSignUp(email, password)}
+      >
+        SignUp
       </IonButton>
     </IonList>
   );

@@ -20,6 +20,7 @@ import "./Home.css";
 import Menu from "../components/Menu/Menu";
 import Files from "../components/Files/Files";
 import NewFile from "../components/NewFile/NewFile";
+import { initFirebase } from "../firebase/index";
 
 const Home: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -30,6 +31,8 @@ const Home: React.FC = () => {
   const [selectedFile, updateSelectedFile] = useState("default");
   const [billType, updateBillType] = useState(1);
   const [device] = useState("default");
+
+  initFirebase();
 
   const store = new Local();
 
