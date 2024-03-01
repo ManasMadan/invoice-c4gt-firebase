@@ -59,6 +59,9 @@ const uploadFileToCloud = async (
 const getFilesKeysFromFirestore = async (userid: string) => {
   const q = query(collection(db, "invoices"), where("owner", "==", userid));
   const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return {};
+  }
   const files = {};
   querySnapshot.forEach((doc) => {
     const data = doc.data();
