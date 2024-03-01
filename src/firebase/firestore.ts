@@ -32,6 +32,10 @@ const uploadFileToCloud = async (
     if (prevFile.exists()) {
       alert("File With the same name exists");
       const newName = prompt("Enter New Name for File");
+      if (!newName) {
+        alert("Name Cannot be empty");
+        return;
+      }
       const prevFile = await getDoc(
         doc(db, "invoices", `${user.uid}-${newName}`)
       );
@@ -97,6 +101,10 @@ const downloadFileFromFirebase = async (userId, key, onSuccess) => {
 
     if (!option) {
       const newName = prompt("Enter New Name for File");
+      if (!newName) {
+        alert("Name Cannot be empty");
+        return;
+      }
       const localFile = await local._getFile(newName);
       if (localFile) {
         alert("File With This Name Also Exists");
