@@ -16371,7 +16371,7 @@ return status;
       separatorchar,
       decimalchar;
     var value; // working copy to change sign, etc.
-
+    var mspos;
     rawvalue = rawvalue - 0; // make sure a number
     value = rawvalue;
     if (!isFinite(value)) return "NaN";
@@ -16555,7 +16555,7 @@ return status;
       );
 
       minOK = 0; // says "m" can be minutes if true
-      mspos = sectioninfo.sectionstart; // m scan position in ops
+      var mspos = sectioninfo.sectionstart; // m scan position in ops
       for (; ; mspos++) {
         // scan for "m" and "mm" to see if any minutes fields, and am/pm
         op = thisformat.operators[mspos];
