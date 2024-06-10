@@ -54,6 +54,8 @@ npm install
 npm install -g @ionic/cli
 ```
 
+- Setup a firebase project and add the firebase configuration in the `.env` file in the format given in the `sample.env`
+
 - Serve the application:
 
 ```bash
@@ -68,7 +70,7 @@ These steps will set up the project and allow you to test it in a development en
 
 - Sync android codebase
 
-```base
+```bash
 ionic cap sync android
 ```
 
@@ -86,7 +88,7 @@ Now you can run the app on a physical device or a virtual emulator, you can also
 
 - Sync ios codebase
 
-```base
+```bash
 ionic cap sync ios
 ```
 
