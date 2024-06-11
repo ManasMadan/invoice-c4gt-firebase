@@ -54,7 +54,7 @@ npm install
 npm install -g @ionic/cli
 ```
 
-- Setup a firebase project and add the firebase configuration in the `.env` file in the format given in the `sample.env`
+- Setup a firebase project and add the firebase configuration in the `.env` file in the format given in the `.env.example`
 
 - Serve the application:
 
