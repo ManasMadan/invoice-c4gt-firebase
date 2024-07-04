@@ -13,6 +13,7 @@
     "generate-pwa-assets": "pwa-assets-generator"
   },
   "dependencies": {
+    "@bcyesil/capacitor-plugin-printer": "^0.0.4",
     "@capacitor/android": "6.1.0",
     "@capacitor/app": "6.0.0",
     "@capacitor/core": "6.1.0",
