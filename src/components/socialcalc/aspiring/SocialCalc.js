@@ -1,3 +1,5 @@
+import { Dialog } from "@capacitor/dialog";
+
 /* eslint-disable */
 // Taken from https://github.com/umdjs/umd/blob/master/templates/returnExports.js
 // (c) by The UMD contributors
@@ -9725,7 +9727,7 @@ ha.style.visibility = 'hidden';
     return;
   };
 
-  SocialCalc.ProcessEditorMouseDown = function (e) {
+  SocialCalc.ProcessEditorMouseDown = async function (e) {
     var editor, result, coord, textarea, wval, range;
 
     var event = e || window.event;
@@ -9735,10 +9737,10 @@ ha.style.visibility = 'hidden';
     var clientY = event.clientY + viewport.verticalScroll;
 
     var mouseinfo = SocialCalc.EditorMouseInfo;
-    var ele = event.target || event.srcElement; // source object is often within what we want
+    var ele = event.target || event.srcElement;
     var mobj;
 
-    if (mouseinfo.ignore) return; // ignore this
+    if (mouseinfo.ignore) return;
 
     for (mobj = null; !mobj && ele; ele = ele.parentNode) {
       // go up tree looking for one of our elements
@@ -9746,7 +9748,7 @@ ha.style.visibility = 'hidden';
     }
     if (!mobj) {
       mouseinfo.editor = null;
-      return; // not one of our elements
+      return;
     }
 
     editor = mobj.editor;
@@ -9754,62 +9756,69 @@ ha.style.visibility = 'hidden';
     range = editor.range;
     result = SocialCalc.GridMousePosition(editor, clientX, clientY);
 
-    if (!result || result.rowheader) return; // not on a cell or col header
-    mouseinfo.editor = editor; // remember for later
+    if (!result || result.rowheader) return;
+    mouseinfo.editor = editor;
 
     if (result.colheader && result.coltoresize) {
-      // col header - do drag resize
       SocialCalc.ProcessEditorColsizeMouseDown(e, ele, result);
       return;
     }
 
-    if (!result.coord) return; // not us
-
+    if (!result.coord) return;
     if (!range.hasrange) {
       if (e.shiftKey) editor.RangeAnchor();
     }
+    var cellname = result.coord;
 
-    SocialCalc.Callbacks.ToggleCell(result.coord);
-    coord = editor.MoveECell(result.coord);
+    var control = SocialCalc.GetCurrentWorkBookControl();
+    var sheetid = control.currentSheetButton.id;
+    var sheetobj = control.workbook.sheetArr[sheetid].sheet;
+    var cell = sheetobj.cells[cellname];
+    if (!cell) return;
 
-    if (range.hasrange) {
-      if (e.shiftKey) editor.RangeExtend();
-      else editor.RangeRemove();
+    var editor = mouseinfo.editor;
+    // var cr = SocialCalc.coordToCr(result.coord);
+    var cellValue = editor.context.sheetobj.GetAssuredCell(
+      result.coord
+    ).datavalue;
+    // Highlight the cell
+    // var cellElement = SocialCalc.GetEditorCellElement(editor, cr.row, cr.col);
+    // if (cellElement) {
+    //   cellElement.element.style.border = "2px solid black";
+    // }
+
+    try {
+      // Show Capacitor Dialog prompt
+      const { value, cancelled } = await Dialog.prompt({
+        title: "Edit Cell",
+        message: `Enter new value for cell ${result.coord}:`,
+        inputText: cellValue || "",
+        okButtonTitle: "Save",
+        cancelButtonTitle: "Cancel",
+      });
+
+      if (!cancelled && value !== null && value !== cellValue) {
+        // User entered a new value
+        editor.EditorScheduleSheetCommands(
+          "set " + result.coord + " text t " + value,
+          true,
+          false
+        );
+      }
+    } catch (error) {
+      console.error("Error showing dialog:", error);
+    } finally {
+      // Remove highlight
+      // if (cellElement) {
+      //   cellElement.element.style.border = "";
+      // }
     }
 
-    mouseinfo.mousedowncoord = coord; // remember if starting drag range select
-    mouseinfo.mouselastcoord = coord;
-
-    editor.EditorMouseRange(coord);
-
-    SocialCalc.KeyboardSetFocus(editor);
-    if (editor.state != "start" && editor.inputBox)
-      editor.inputBox.element.focus();
-
-    // Event code from JavaScript, Flanagan, 5th Edition, pg. 422
-    if (document.addEventListener) {
-      // DOM Level 2 -- Firefox, et al
-      document.addEventListener(
-        "mousemove",
-        SocialCalc.ProcessEditorMouseMove,
-        true
-      ); // capture everywhere
-      document.addEventListener(
-        "mouseup",
-        SocialCalc.ProcessEditorMouseUp,
-        true
-      ); // capture everywhere
-    } else if (ele.attachEvent) {
-      // IE 5+
-      ele.setCapture();
-      ele.attachEvent("onmousemove", SocialCalc.ProcessEditorMouseMove);
-      ele.attachEvent("onmouseup", SocialCalc.ProcessEditorMouseUp);
-      ele.attachEvent("onlosecapture", SocialCalc.ProcessEditorMouseUp);
-    }
-    if (event.stopPropagation) event.stopPropagation(); // DOM Level 2
-    else event.cancelBubble = true; // IE 5+
-    if (event.preventDefault) event.preventDefault(); // DOM Level 2
-    else event.returnValue = false; // IE 5+
+    // Prevent default behavior
+    if (event.stopPropagation) event.stopPropagation();
+    else event.cancelBubble = true;
+    if (event.preventDefault) event.preventDefault();
+    else event.returnValue = false;
 
     return;
   };
